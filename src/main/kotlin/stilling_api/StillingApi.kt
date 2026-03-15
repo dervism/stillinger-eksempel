@@ -125,4 +125,13 @@ fun main() {
         }
         println()
     }
+
+    println()
+    println()
+
+    // print full details for the first hit
+    val firstHit = hits.first()
+    val detail = fetchFeedEntry(firstHit.id!!, TOKEN)
+    println("Full details for ${firstHit.source?.title}:")
+    println(detail?.adContent?.format())
 }

@@ -117,6 +117,19 @@ async function main() {
         }
         console.log();
     }
+
+    console.log();
+    console.log();
+
+    // print full details of the first ad
+    const first = hits[0];
+    if (first) {
+        const detail = first._id ? await fetchFeedEntry(first._id, TOKEN) : null;
+        if (detail?.ad_content) {
+            console.log(`Full details for ${first._source?.title}`);
+            console.log(JSON.stringify(detail.ad_content, null, 2));
+        }
+    }
 }
 
 main();
