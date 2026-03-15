@@ -1,6 +1,6 @@
 # stillinger
 
-A Kotlin command-line application for fetching and filtering job listings from the [NAV Arbeidsplassen](https://arbeidsplassen.nav.no) job vacancy feed API.
+A Kotlin command-line application for fetching and filtering job listings from the [NAV Arbeidsplassen](https://arbeidsplassen.nav.no) API.
 
 ## Prerequisites
 
@@ -20,6 +20,8 @@ mvn compile exec:java
 cd src/main/resources
 node StillingApi.ts
 ```
+
+Make sure you have Node version 22 or newer. Check with `node -v` in your terminal.
 
 ## Project structure
     
