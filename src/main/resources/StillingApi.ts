@@ -74,6 +74,8 @@ async function searchAllAds(
         }
 
         const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+
+        //@ts-ignore
         process.stderr.write(`\rPage ${pageCount} | ${results.length} / ${total} hits | ${elapsed}s`);
 
         if (results.length >= total || hits.length === 0) break;
@@ -83,7 +85,11 @@ async function searchAllAds(
     }
 
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+
+    //@ts-ignore
     process.stderr.write("\n");
+
+    //@ts-ignore
     process.stderr.write(`Done: ${results.length} hits in ${elapsed}s\n`);
 
     return results;
