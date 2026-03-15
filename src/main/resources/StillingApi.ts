@@ -88,6 +88,8 @@ async function searchAllAds(
 }
 
 async function main() {
+
+    // get all the search results
     const hits = await searchAllAds(
         "nav",
         "2026-03-13",
@@ -96,6 +98,7 @@ async function main() {
     console.log(`=== ${hits.length} treff for 'nav' publisert 2026-03-13 ===`);
     console.log();
 
+    // print details about each ad
     for (const hit of hits) {
         const src = hit._source;
         if (!src) continue;
