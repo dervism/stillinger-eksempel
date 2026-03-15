@@ -70,8 +70,7 @@ fun searchAllAds(
     sort: String = "published",
     published: String,
     pageSize: Int = 25,
-    feedToken: String,
-): List<StillingResult> {
+): List<Hit> {
     val startTime = System.currentTimeMillis()
 
     val firstPage = fetchSearchPage(query, pageSize, sort, published, 0)
@@ -88,12 +87,6 @@ fun searchAllAds(
         System.err.printf("\rPage %d | %,d / %,d hits | %.1fs", pageIndex + 1, fetched, total, elapsed)
     }
     .flatMap { (_, page) -> page.hits?.hits.orEmpty().asSequence() }
-    .map { hit ->
-        StillingResult(
-            hit = hit,
-            details = lazy { hit.id?.let { fetchFeedEntry(it, feedToken) } },
-        )
-    }
     .toList()
     .also {
         val elapsed = (System.currentTimeMillis() - startTime) / 1000.0
@@ -107,25 +100,22 @@ fun searchAllAds(
 // ---------------------------------------------------------------------------
 
 fun main() {
-    val results = searchAllAds(
+    val hits = searchAllAds(
         query = "nav",
         published = "2026-03-13",
-        feedToken = TOKEN,
     )
 
-    println("=== ${results.size} treff for 'nav' publisert 2026-03-13 ===")
+    println("=== ${hits.size} treff for 'nav' publisert 2026-03-13 ===")
     println()
 
-    results.forEach { result ->
-        // TL;DR: "Give me the source, or skip this item by continuing the forEach loop."
-        val src = result.hit.source ?: return@forEach
+    hits.forEach { hit ->
+        val src = hit.source ?: return@forEach
 
         val loc = src.locationList?.firstOrNull()
         println("${src.title}")
         println("  ${src.businessName} | ${loc?.municipal ?: ""} | ${src.published?.take(10)}")
 
-        // Lazy detail loading — the Feed API call happens here, on first access:
-        val detail = result.details.value
+        val detail = hit.id?.let { fetchFeedEntry(it, TOKEN) }
         if (detail?.adContent != null) {
             val ad = detail.adContent
             println("  Søknadsfrist: ${ad.applicationDue ?: "Ikke oppgitt"}")

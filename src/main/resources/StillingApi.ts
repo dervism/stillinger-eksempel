@@ -1,6 +1,5 @@
-import type { SearchResponse } from "./SearchModels";
-import type { FeedEntryContent } from "./FeedModels";
-import type { StillingResult } from "./StillingResult";
+import type { SearchResponse, Hit } from "./SearchModels.ts";
+import type { FeedEntryContent } from "./FeedModels.ts";
 
 const SEARCH_URL = "https://arbeidsplassen.nav.no/stillinger/api/search";
 const FEED_URL   = "https://pam-stilling-feed.nav.no/api/v1/feedentry";
@@ -48,12 +47,11 @@ async function fetchFeedEntry(uuid: string, token: string): Promise<FeedEntryCon
 async function searchAllAds(
     query: string,
     published: string,
-    feedToken: string,
     sort: string = "published",
     pageSize: number = 25,
-): Promise<StillingResult[]> {
+): Promise<Hit[]> {
     const startTime = Date.now();
-    const results: StillingResult[] = [];
+    const results: Hit[] = [];
 
     const firstPage = await fetchSearchPage(query, pageSize, sort, published, 0);
     const total = firstPage.hits?.total?.value ?? 0;
@@ -65,13 +63,7 @@ async function searchAllAds(
     while (true) {
         pageCount++;
         const hits = page.hits?.hits ?? [];
-
-        for (const hit of hits) {
-            results.push({
-                hit,
-                details: () => hit._id ? fetchFeedEntry(hit._id, feedToken) : Promise.resolve(null),
-            });
-        }
+        results.push(...hits);
 
         const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
 
@@ -96,24 +88,23 @@ async function searchAllAds(
 }
 
 async function main() {
-    const results = await searchAllAds(
+    const hits = await searchAllAds(
         "nav",
         "2026-03-13",
-        TOKEN,
     );
 
-    console.log(`=== ${results.length} treff for 'nav' publisert 2026-03-13 ===`);
+    console.log(`=== ${hits.length} treff for 'nav' publisert 2026-03-13 ===`);
     console.log();
 
-    for (const result of results) {
-        const src = result.hit._source;
+    for (const hit of hits) {
+        const src = hit._source;
         if (!src) continue;
 
         const loc = src.locationList?.[0];
         console.log(src.title);
         console.log(`  ${src.businessName} | ${loc?.municipal ?? ""} | ${src.published?.substring(0, 10)}`);
 
-        const detail = await result.details();
+        const detail = hit._id ? await fetchFeedEntry(hit._id, TOKEN) : null;
         if (detail?.ad_content) {
             const ad = detail.ad_content;
             console.log(`  Søknadsfrist: ${ad.applicationDue ?? "Ikke oppgitt"}`);
