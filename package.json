@@ -1,0 +1,16 @@
+{
+  "name": "stillinger-eksempel",
+  "version": "1.0.0",
+  "description": "A Kotlin command-line application for fetching and filtering job listings from the [NAV Arbeidsplassen](https://arbeidsplassen.nav.no) job vacancy feed API.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "docx": "^9.6.1"
+  }
+}
