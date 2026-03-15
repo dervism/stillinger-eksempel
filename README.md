@@ -2,8 +2,8 @@
 
 A Kotlin command-line application for fetching and filtering job listings from the [NAV Arbeidsplassen](https://arbeidsplassen.nav.no) API.
 
-- [Kotlin implementation](src/main/kotlin/stilling_api/StillingApi.kt)
-- [TypeScript implementation](src/main/resources/StillingApi.ts)
+- [Kotlin implementation](src/main/kotlin/stilling_api/)
+- [TypeScript implementation](src/main/resources)
 
 ## Prerequisites
 
