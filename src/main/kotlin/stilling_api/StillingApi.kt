@@ -108,6 +108,7 @@ fun main() {
     println("=== ${hits.size} treff for 'nav' publisert 2026-03-13 ===")
     println()
 
+    // Example 1: Create a search list (all search results are in the hits object)
     hits.forEach { hit ->
         val src = hit.source ?: return@forEach
 
@@ -129,7 +130,7 @@ fun main() {
     println()
     println()
 
-    // print full details for the first hit
+    // Example 2: Print full details for the first hit
     val firstHit = hits.first()
     val detail = fetchFeedEntry(firstHit.id!!, TOKEN)
     println("Full details for ${firstHit.source?.title}:")

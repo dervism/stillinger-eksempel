@@ -89,7 +89,7 @@ async function searchAllAds(
 
 async function main() {
 
-    // get all the search results
+    // Example 1: Create a search list (all search results are in the hits object)
     const hits = await searchAllAds(
         "nav",
         "2026-03-13",
@@ -121,7 +121,7 @@ async function main() {
     console.log();
     console.log();
 
-    // print full details of the first ad
+    // Example 2: Print full details for the first hit
     const first = hits[0];
     if (first) {
         const detail = first._id ? await fetchFeedEntry(first._id, TOKEN) : null;
